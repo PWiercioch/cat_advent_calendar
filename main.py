@@ -4,7 +4,6 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen
-from kivy.lang import Builder
 from datetime import date
 
 
@@ -12,62 +11,50 @@ class MainWindow(Screen):
     def __init__(self, **kwargs):
         super(MainWindow, self).__init__(**kwargs)
 
-        self.test_text = 'test'
+        self.outside = GridLayout()
+        self.outside.cols = 1
+
+        self.outside.add_widget(Label(text='Hello', size_hint_y=None, height=100, font_size=25))
 
         self.inside = GridLayout()
-        self.inside.cols = 2
+        self.inside.cols = 7
 
-        my_button1 = Button(text="Go to screen 1")
-        my_button1.bind(on_release=self.changer)
-        self.inside.add_widget(my_button1)
+        for n in range(24):
+            my_button1 = Button(text=f"Day {n+1}")
+            my_button1.bind(on_release=self.changer)
+            self.inside.add_widget(my_button1)
 
-        self.add_widget(self.inside)
+        self.outside.add_widget(self.inside)
+        self.add_widget(self.outside)
 
-        # self.add_widget(Label(text="Hello"))
-        # self.ids["loki"].text = "loki: >_<!!!"
 
-        '''
-        self.inside = GridLayout()
-        self.inside.cols = 2
-
-        self.inside.add_widget(Label(text="Hello"))
-
-        for n in range(25):
-            print(n)
-            # self.inside.add_widget(Label(text=f"Hello nr:{n}"))
-            # self.inside.add_widget(Image(source=self.get_date()))
-
-        self.add_widget(self.inside)
-
-        self.inside.add_widget(Button(text="To second page", font_size=40))
-        '''
-
-    def changer(self ,*args):
+    def changer(self, *args):
         self.manager.current = 'second'
-
-    def add_content(self):
-        self.inside = GridLayout()
-        self.inside.cols = 2
-
-        self.inside.add_widget(Label(text="Hello"))
-        self.inside.add_widget(Label(text="Hello"))
+        self.manager.transition.direction = 'left'
 
     def get_date(self):
-        data = date.today()
-        if int(data.strftime("%d")) == 5:
-            return '1.jpg'
-        else:
-            return '2.jpg'
+        pass
 
 
 class SecondWindow(Screen):
     def __init__(self, **kwargs):
         super(SecondWindow, self).__init__(**kwargs)
-        '''
-        self.cols = 1
 
-        self.add_widget(Button(text="To main page", font_size=40))
-        '''
+        self.grid = GridLayout()
+        self.grid.cols = 1
+
+        self.grid.add_widget(Image(source='1.jpg'))
+
+        button = Button(text="To main page", size_hint_y=None, height=100, font_size=25)
+        button.bind(on_release=self.changer)
+        self.grid.add_widget(button)
+
+        self.add_widget(self.grid)
+
+    def changer(self, *args):
+        self.manager.current = 'main'
+        self.manager.transition.direction = 'right'
+
 
 
 class WindowManager(ScreenManager):
@@ -78,8 +65,6 @@ class WindowManager(ScreenManager):
         self.add_widget(screen1)
         self.add_widget(screen2)
 
-
-kv = Builder.load_file("my.kv")
 
 
 class MyApp(App):
