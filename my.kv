@@ -1,0 +1,23 @@
+#:import Button kivy.uix.button.Button
+
+
+WindowManager:
+    MainWindow:
+    SecondWindow:
+
+<MainWindow>:
+    name: "main"
+
+
+
+
+
+
+<SecondWindow>:
+    name: "second"
+
+    Button:
+        text: "back"
+        on_release:
+            app.root.current = "main"
+            root.manager.transition.direction = "right"
