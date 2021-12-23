@@ -5,6 +5,7 @@ from kivy.uix.button import Button
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import ScreenManager, Screen
 from datetime import date
+from texts import *
 
 
 class MainWindow(Screen):
@@ -16,7 +17,7 @@ class MainWindow(Screen):
         self.outside = GridLayout()
         self.outside.cols = 1
 
-        self.outside.add_widget(Label(text=f'Hello to year {self.year} advent cat calendar', size_hint_y=None, height=100, font_size=25))
+        self.outside.add_widget(Label(text=f'Welcome to year {self.year} advent cat calendar', size_hint_y=None, height=100, font_size=25))
 
         self.inside = GridLayout()
         self.inside.cols = 7
@@ -37,6 +38,7 @@ class MainWindow(Screen):
 
     def changer(self, button, *args):
         self.manager.get_screen('second').ids['picture'].source = str(button.value) + '.jpg'
+        self.manager.get_screen('second').ids['txt'].text = texts[button.value]
         self.manager.current = 'second'
         self.manager.transition.direction = 'left'
 
@@ -56,10 +58,12 @@ class SecondWindow(Screen):
         self.grid = GridLayout()
         self.grid.cols = 1
 
-        picture = Image(source=f'1.jpg')
-        self.grid.add_widget(Label(text=f"Meow", size_hint_y=None, height=100, font_size=15))
+        picture = Image(source=f'0')
+        label = Label(text='Error', size_hint_y=None, height=100, font_size=15)
+        self.grid.add_widget(label)
         self.grid.add_widget(picture)
         self.ids['picture'] = picture
+        self.ids['txt'] = label
 
         button = Button(text="To main page", size_hint_y=None, height=100, font_size=25)
         button.bind(on_release=self.changer)
